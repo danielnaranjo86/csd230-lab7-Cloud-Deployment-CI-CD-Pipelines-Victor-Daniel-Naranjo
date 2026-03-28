@@ -4,7 +4,7 @@ on:
 
   push:
 
-    branches: [ "main", "master","lab7-cloud-deplyment-ci-cd-pipeline" ]
+    branches: [ "main", "master","lab7-cloud-deplyment-ci-cd-pipelines" ]
 
 jobs:
 
