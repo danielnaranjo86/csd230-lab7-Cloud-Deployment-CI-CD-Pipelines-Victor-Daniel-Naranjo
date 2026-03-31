@@ -48,27 +48,44 @@ function MagazineForm({ onMagazineAdded, api }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="form-container" style={{ border: '2px solid purple', padding: '20px' }}>
+        <form onSubmit={handleSubmit} className="form-style">
             <h3>Add New Magazine</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <input type="text" placeholder="Magazine Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-
-                <input type="number" step="0.01" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} required />
-
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <label>Copies: <input type="number" value={copies} onChange={(e) => setCopies(e.target.value)} required style={{width: '70px'}}/></label>
-                    <label>Order Qty: <input type="number" value={orderQty} onChange={(e) => setOrderQty(e.target.value)} required style={{width: '70px'}}/></label>
-                </div>
-
-                <label>
-                    Issue Date:
-                    <input type="datetime-local" value={currentIssue} onChange={(e) => setCurrentIssue(e.target.value)} required style={{ marginLeft: '10px' }} />
-                </label>
-
-                <button type="submit" style={{ backgroundColor: 'purple', color: 'white', padding: '10px' }}>
-                    Save to Database
-                </button>
-            </div>
+            <input
+                type="text"
+                placeholder="Magazine Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+            />
+            <input
+                type="number"
+                step="0.01"
+                placeholder="Price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+            />
+            <input
+                type="number"
+                placeholder="Copies"
+                value={copies}
+                onChange={(e) => setCopies(e.target.value)}
+                required
+            />
+            <input
+                type="number"
+                placeholder="Order Qty"
+                value={orderQty}
+                onChange={(e) => setOrderQty(e.target.value)}
+                required
+            />
+            <input
+                type="datetime-local"
+                value={currentIssue}
+                onChange={(e) => setCurrentIssue(e.target.value)}
+                required
+            />
+            <button type="submit">Save Magazine</button>
         </form>
     );
 }
