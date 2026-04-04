@@ -3,9 +3,7 @@ package csd230.bookstore;
 
 import com.github.javafaker.Commerce;
 import com.github.javafaker.Faker;
-import csd230.bookstore.entities.BookEntity;
-import csd230.bookstore.entities.CartEntity;
-import csd230.bookstore.entities.UserEntity;
+import csd230.bookstore.entities.*;
 import csd230.bookstore.repositories.CartEntityRepository;
 import csd230.bookstore.repositories.ProductEntityRepository;
 import csd230.bookstore.repositories.UserEntityRepository;
@@ -17,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.time.LocalDateTime;
 
 
 @SpringBootApplication
@@ -49,29 +49,70 @@ public class Application implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Faker faker = new Faker();
         Commerce cm = faker.commerce();
-        com.github.javafaker.Number number = faker.number();
-        com.github.javafaker.Book fakeBook = faker.book();
-        String name = cm.productName();
-        String description = cm.material();
 
+        // -----------------------------
+        // SEED BOOKS
+        // -----------------------------
         for (int i = 0; i < 10; i++) {
-            // We call the faker methods inside the loop so each book gets unique data
             String title = faker.book().title();
             String author = faker.book().author();
             String priceString = faker.commerce().price();
 
-            // Create the book entity with the random data
             BookEntity book = new BookEntity(
                     title,
                     Double.parseDouble(priceString),
-                    10,      // Defaulting to 10 copies each
+                    10,
                     author
             );
 
-            // Save to database
             productRepository.save(book);
-
             System.out.println("Saved Book " + (i + 1) + ": " + title + " by " + author);
+        }
+
+        // -----------------------------
+        // SEED MAGAZINES
+        // -----------------------------
+        for (int i = 0; i < 10; i++) {
+            MagazineEntity magazine = new MagazineEntity();
+            magazine.setTitle(faker.book().title() + " Magazine");
+            magazine.setPrice(Double.parseDouble(faker.commerce().price()));
+            magazine.setCopies(faker.number().numberBetween(5, 25));
+            magazine.setOrderQty(faker.number().numberBetween(20, 150));
+            magazine.setCurrentIssue(LocalDateTime.now().minusDays(faker.number().numberBetween(0, 30)));
+
+            productRepository.save(magazine);
+            System.out.println("Saved Magazine " + (i + 1) + ": " + magazine.getTitle());
+        }
+
+        // -----------------------------
+        // SEED GUITARS
+        // -----------------------------
+        String[] guitarBrands = {"Fender", "Gibson", "Ibanez", "Yamaha", "PRS", "Epiphone"};
+        String[] guitarModels = {"Stratocaster", "Les Paul", "RG", "Pacifica", "Custom 24", "SG"};
+
+        for (int i = 0; i < 10; i++) {
+            GuitarEntity guitar = new GuitarEntity();
+            guitar.setBrand(guitarBrands[faker.random().nextInt(guitarBrands.length)]);
+            guitar.setModel(guitarModels[faker.random().nextInt(guitarModels.length)]);
+            guitar.setPrice(Double.parseDouble(faker.commerce().price()));
+
+            productRepository.save(guitar);
+            System.out.println("Saved Guitar " + (i + 1) + ": " + guitar.getBrand() + " " + guitar.getModel());
+        }
+
+        // -----------------------------
+        // SEED DRUM KITS
+        // -----------------------------
+        String[] drumBrands = {"Pearl", "Yamaha", "Tama", "Ludwig", "Sonor", "Mapex"};
+
+        for (int i = 0; i < 10; i++) {
+            DrumKitEntity drumKit = new DrumKitEntity();
+            drumKit.setBrand(drumBrands[faker.random().nextInt(drumBrands.length)]);
+            drumKit.setPieces(faker.number().numberBetween(4, 8));
+            drumKit.setPrice(Double.parseDouble(faker.commerce().price()));
+
+            productRepository.save(drumKit);
+            System.out.println("Saved Drum Kit " + (i + 1) + ": " + drumKit.getBrand() + " (" + drumKit.getPieces() + " pieces)");
         }
 
 
